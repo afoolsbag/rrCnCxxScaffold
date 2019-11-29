@@ -86,11 +86,11 @@ void application_options::parse_from_command_lice(int argc, const char *const ar
     opts.add(general_options_).add(common_options_).add(hidden_options_);
 #//=============================================================================
 #//
-    boost::program_options::positional_options_description poss;
-    poss.add("parameters", -1);
+    boost::program_options::positional_options_description pos;
+    pos.add("parameters", -1);
 #//
 #//-----------------------------------------------------------------------------
-    boost::program_options::store(boost::program_options::command_line_parser {argc, argv}.options(opts).positional(poss).run(), variables_map_);
+    boost::program_options::store(boost::program_options::command_line_parser {argc, argv}.options(opts).positional(pos).run(), variables_map_);
     boost::program_options::notify(variables_map_);
 }
 

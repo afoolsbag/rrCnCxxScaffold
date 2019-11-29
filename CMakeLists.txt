@@ -51,8 +51,8 @@ add_library_ex(
 
 # 程序：${PROJECT_NAME}
 configure_file("src/configuration.hxx.in" "src/configuration.hxx" @ONLY)
-aux_source_directory_con("src"                             zSrc               PREFIX "src")
-aux_source_directory_con("${CMAKE_CURRENT_BINARY_DIR}/src" zGenerated RECURSE PREFIX "generated")
+aux_source_directory_con("src"                             zSrc       RECURSE EXTENSIONS ".rc" PREFIX "src")
+aux_source_directory_con("${CMAKE_CURRENT_BINARY_DIR}/src" zGenerated RECURSE                  PREFIX "generated")
 add_executable_con(
   "${PROJECT_NAME}"   ${zSrc} ${zGenerated}
                       "README.md"
@@ -66,11 +66,40 @@ add_executable_con(
   LINK_LIBRARIES      PRIVATE rrspdlog
                               CONAN_PKG::boost
                               CONAN_PKG::gsl_microsoft
-                              $<$<PLATFORM_ID:Linux>:stdc++fs>)
+                              $<$<PLATFORM_ID:Linux>:stdc++fs>
+  SOURCES             PRIVATE $<$<CXX_COMPILER_ID:MSVC>:src/version.rc>)
 
 # 安装
 install(
   FILES       "UNLICENSE.txt"
   DESTINATION ".")
 
-# 打包
+# 安装包
+if(WIN32)
+
+  # https://cmake.org/cmake/help/latest/module/CPack.html
+  # https://cmake.org/cmake/help/latest/cpack_gen/wix.html
+
+  set(CPACK_GENERATOR             WIX)
+
+  set(CPACK_PACKAGE_NAME          "${PRODUCT_NAME}")
+  math(EXPR nTmp                  "${PRODUCT_VERSION_MAJOR} % 100")
+  set(CPACK_PACKAGE_VERSION_MAJOR "${nTmp}")
+  math(EXPR nTmp                  "${PRODUCT_VERSION_MINOR} % 100")
+  set(CPACK_PACKAGE_VERSION_MINOR "${nTmp}")
+  math(EXPR nTmp                  "${PRODUCT_VERSION_PATCH} % 100")
+  set(CPACK_PACKAGE_VERSION_PATCH "${nTmp}")
+  set(CPACK_PACKAGE_DESCRIPTION   "${PRODUCT_DESCRIPTION}")
+  set(CPACK_PACKAGE_HOMEPAGE_URL  "${PRODUCT_HOMEPAGE_URL}")
+  set(CPACK_PACKAGE_VENDOR        "${PRODUCT_AUTHORS}")
+
+  set(CPACK_RESOURCE_FILE_LICENSE "${PRODUCT_SOURCE_DIR}/UNLICENSE.txt")
+  set(CPACK_RESOURCE_FILE_README  "${PRODUCT_SOURCE_DIR}/README.md")
+  set(CPACK_PACKAGE_EXECUTABLES   "${PROJECT_NAME}" "${PROJECT_NAME}")
+  set(CPACK_PACKAGE_CHECKSUM      SHA256)
+
+  set(CPACK_WIX_CULTURES          zh-CN)
+
+  include(CPack)
+
+endif()

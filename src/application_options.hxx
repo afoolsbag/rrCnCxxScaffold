@@ -4,7 +4,7 @@
 /// \brief 应用选项
 /// \sa <https://boost.org/doc/libs/master/libs/program_options/>
 ///
-/// \version 2019-11-10
+/// \version 2019-11-25
 /// \since 2019-08-15
 /// \authors zhengrr
 /// \copyright Unlicense
@@ -28,15 +28,15 @@ class application_options final {
 private:
     struct {
         bool help;                                   ///< 帮助信息
-        bool debug;                                  ///< 调试信息
         bool version;                                ///< 版本信息
+        bool debug;                                  ///< 调试信息
         boost::filesystem::path configuration_file;  ///< 配置文件
         std::string environment_prefix;              ///< 环境变量前缀
 #//=============================================================================
 #//
-        boost::filesystem::path  logs_directory;      ///< 日志目录
-        std::uint16_t            export_port;         ///< 导出端口（监听端口）
-        std::vector<std::string> parameters;          ///< 参数
+        boost::filesystem::path  logs_directory;     ///< 日志目录
+        std::uint16_t            export_port;        ///< 导出端口（监听端口）
+        std::vector<std::string> parameters;         ///< 参数
 #//
 #//-----------------------------------------------------------------------------
     } entries_;

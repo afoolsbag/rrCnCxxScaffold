@@ -1,11 +1,9 @@
 //===------------------------------------------------------------*- C++ -*-===//
 ///
 /// \file
-/// \brief 一个小玩意儿，提供简单的 TCP 服务
-/// \sa <https://boost.org/doc/libs/master/doc/html/boost_asio.html>
-/// \sa <https://boost.org/doc/libs/master/doc/html/program_options.html>
+/// \brief 脚手架示例工程
 ///
-/// \version 2019-11-21
+/// \version 2019-11-26
 /// \since 2018-04-02
 /// \authors zhengrr
 /// \copyright Unlicense
@@ -15,6 +13,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <locale>
+
+#include <boost/filesystem/path.hpp>
 
 #include <boost/asio.hpp>
 #include <rrspdlog/rrspdlog.hxx>
@@ -70,6 +70,11 @@ int main(int argc, char *argv[]) noexcept
             try { return locale {"C.UTF-8"}; } catch (...) { /*just pass*/ }
             return locale::classic();
         }());
+#if defined(BOOST_FILESYSTEM_PATH_HPP) && 0 /*BUG!*/
+        // 本地化环境：boost::filesystem::path
+        // see https://boost.org/doc/libs/master/libs/locale/default_encoding_under_windows.html
+        boost::filesystem::path::imbue(locale {});
+#endif
 
         // 调试选项
         if (opts->debug) {
@@ -106,7 +111,7 @@ int main(int argc, char *argv[]) noexcept
         return EXIT_FAILURE;
 
     } catch (...) {
-        SPDLOG_CRITICAL("Caught non-standard exception in main function");
+        SPDLOG_CRITICAL("Caught non-standard exception in main function.");
         return EXIT_FAILURE;
 
     }
