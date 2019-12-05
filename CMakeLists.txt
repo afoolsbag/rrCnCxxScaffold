@@ -35,7 +35,7 @@ add_compile_options_ex(
 include_conan_script()
 conan_cmake_run(
   REQUIRES    boost/1.71.0@conan/stable
-              gsl_microsoft/2.0.0@bincrafters/stable
+              ms-gsl/2.0.0
               spdlog/1.3.1@bincrafters/stable
   BASIC_SETUP CMAKE_TARGETS
   BUILD       missing)
@@ -65,7 +65,7 @@ add_executable_con(
                               "${CMAKE_CURRENT_BINARY_DIR}/src"
   LINK_LIBRARIES      PRIVATE rrspdlog
                               CONAN_PKG::boost
-                              CONAN_PKG::gsl_microsoft
+                              CONAN_PKG::ms-gsl
                               $<$<PLATFORM_ID:Linux>:stdc++fs>
   SOURCES             PRIVATE $<$<CXX_COMPILER_ID:MSVC>:src/version.rc>)
 
@@ -75,8 +75,30 @@ install(
   DESTINATION ".")
 
 # 安装包
-if(WIN32)
+if(UNIX)
+  # https://cmake.org/cmake/help/latest/module/CPack.html
+  # https://cmake.org/cmake/help/latest/cpack_gen/archive.html
 
+  set(CPACK_GENERATOR             TGZ)
+
+  set(CPACK_PACKAGE_NAME          "${PRODUCT_NAME}")
+  math(EXPR nTmp                  "${PRODUCT_VERSION_MAJOR} % 100")
+  set(CPACK_PACKAGE_VERSION_MAJOR "${nTmp}")
+  math(EXPR nTmp                  "${PRODUCT_VERSION_MINOR} % 100")
+  set(CPACK_PACKAGE_VERSION_MINOR "${nTmp}")
+  math(EXPR nTmp                  "${PRODUCT_VERSION_PATCH} % 100")
+  set(CPACK_PACKAGE_VERSION_PATCH "${nTmp}")
+  set(CPACK_PACKAGE_DESCRIPTION   "${PRODUCT_DESCRIPTION}")
+  set(CPACK_PACKAGE_HOMEPAGE_URL  "${PRODUCT_HOMEPAGE_URL}")
+  set(CPACK_PACKAGE_VENDOR        "${PRODUCT_AUTHORS}")
+
+  set(CPACK_RESOURCE_FILE_LICENSE "${PRODUCT_SOURCE_DIR}/UNLICENSE.txt")
+  set(CPACK_RESOURCE_FILE_README  "${PRODUCT_SOURCE_DIR}/README.md")
+  set(CPACK_PACKAGE_CHECKSUM      SHA256)
+
+  include(CPack)
+endif()
+if(WIN32)
   # https://cmake.org/cmake/help/latest/module/CPack.html
   # https://cmake.org/cmake/help/latest/cpack_gen/wix.html
 
@@ -101,5 +123,4 @@ if(WIN32)
   set(CPACK_WIX_CULTURES          zh-CN)
 
   include(CPack)
-
 endif()
