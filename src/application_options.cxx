@@ -13,27 +13,29 @@
 #include <boost/optional/optional_io.hpp>
 
 using namespace std;
+using namespace boost::dll;
+using namespace boost::program_options;
 
 application_options::application_options(int argc, const char *const argv[])
 {
-    const auto default_config_file = boost::dll::program_location().replace_extension(".cfg");
-    const auto default_environment_prefix = boost::dll::program_location().stem().string() + "_";
+    const auto default_config_file = program_location().replace_extension(".cfg");
+    const auto default_environment_prefix = program_location().stem().string() + "_";
     general_options_.add_options()
-        ("help,?", boost::program_options::bool_switch(&entries_.help)->default_value(false), "Print Help (this message) and exit")
-        ("version", boost::program_options::bool_switch(&entries_.version)->default_value(false), "Print version information and exit");
+        ("help,?", bool_switch(&entries_.help)->default_value(false), "Print Help (this message) and exit")
+        ("version", bool_switch(&entries_.version)->default_value(false), "Print version information and exit");
     common_options_.add_options()
-        ("debug,!", boost::program_options::bool_switch(&entries_.debug)->default_value(false), "Enable debugging");
+        ("debug,!", bool_switch(&entries_.debug)->default_value(false), "Enable debugging");
     hidden_options_.add_options()
-        ("configuration-file", boost::program_options::value(&entries_.configuration_file)->default_value(default_config_file), "Specify configuration file")
-        ("environment-prefix", boost::program_options::value(&entries_.environment_prefix)->default_value(default_environment_prefix), "Specify environment prefix");
+        ("configuration-file", value(&entries_.configuration_file)->default_value(default_config_file), "Specify configuration file")
+        ("environment-prefix", value(&entries_.environment_prefix)->default_value(default_environment_prefix), "Specify environment prefix");
 #//=============================================================================
 #//
-    const auto default_logs_directory = boost::dll::program_location().replace_extension(".logs");
+    const auto default_logs_directory = program_location().replace_extension(".logs");
     common_options_.add_options()
-        ("logs-directory", boost::program_options::value(&entries_.logs_directory)->default_value(default_logs_directory), "Specify logs directory")
-        ("export-port,p", boost::program_options::value(&entries_.export_port)->default_value(49152), "Specify listening port");
+        ("logs-directory", value(&entries_.logs_directory)->default_value(default_logs_directory), "Specify logs directory")
+        ("export-port,p", value(&entries_.export_port)->default_value(49152), "Specify listening port");
     hidden_options_.add_options()
-        ("parameters", boost::program_options::value(&entries_.parameters)->composing(), "Add some parameter(s)");
+        ("parameters", value(&entries_.parameters)->composing(), "Add some parameter(s)");
 #//
 #//-----------------------------------------------------------------------------
     parse_from_command_lice(argc, argv);
@@ -43,7 +45,7 @@ application_options::application_options(int argc, const char *const argv[])
 
 void application_options::print_help(std::ostream &os) const
 {
-    const auto program_name = boost::dll::program_location().filename().string();
+    const auto program_name = program_location().filename().string();
 
     os << '\n';
 #//=============================================================================
@@ -54,7 +56,7 @@ void application_options::print_help(std::ostream &os) const
 #//
 #//-----------------------------------------------------------------------------
     os << '\n';
-    boost::program_options::options_description desc {"Options"};
+    options_description desc {"Options"};
     desc.add(general_options_).add(common_options_);
     os << desc;
     os << '\n';
@@ -82,16 +84,16 @@ void application_options::print_options(std::ostream &os) const
 
 void application_options::parse_from_command_lice(int argc, const char *const argv[])
 {
-    boost::program_options::options_description opts;
+    options_description opts;
     opts.add(general_options_).add(common_options_).add(hidden_options_);
 #//=============================================================================
 #//
-    boost::program_options::positional_options_description pos;
+    positional_options_description pos;
     pos.add("parameters", -1);
 #//
 #//-----------------------------------------------------------------------------
-    boost::program_options::store(boost::program_options::command_line_parser {argc, argv}.options(opts).positional(pos).run(), variables_map_);
-    boost::program_options::notify(variables_map_);
+    store(command_line_parser {argc, argv}.options(opts).positional(pos).run(), variables_map_);
+    notify(variables_map_);
 }
 
 void application_options::parse_from_configuration_file(const boost::filesystem::path &configuration_file)
@@ -106,11 +108,11 @@ void application_options::parse_from_configuration_file(const boost::filesystem:
         throw runtime_error {oss.str()};
     }
 
-    boost::program_options::options_description opts;
+    options_description opts;
     opts.add(common_options_).add(hidden_options_);
 
-    boost::program_options::store(boost::program_options::parse_config_file(ifs, opts), variables_map_);
-    boost::program_options::notify(variables_map_);
+    store(parse_config_file(ifs, opts), variables_map_);
+    notify(variables_map_);
 }
 
 void application_options::parse_from_environment(const string &environment_prefix)
@@ -127,11 +129,11 @@ void application_options::parse_from_environment(const string &environment_prefi
         return variable;
     };
 
-    boost::program_options::options_description opts;
+    options_description opts;
     opts.add(common_options_).add(hidden_options_);
 
-    boost::program_options::store(boost::program_options::parse_environment(opts, variables_map), variables_map_);
-    boost::program_options::notify(variables_map_);
+    store(parse_environment(opts, variables_map), variables_map_);
+    notify(variables_map_);
 }
 
 void application_options::launch_debugger()
