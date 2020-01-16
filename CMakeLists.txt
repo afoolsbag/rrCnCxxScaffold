@@ -97,8 +97,8 @@ if(UNIX)
   set(CPACK_PACKAGE_CHECKSUM      SHA256)
 
   include(CPack)
-endif()
-if(WIN32)
+
+elseif(WIN32)
   # https://cmake.org/cmake/help/latest/module/CPack.html
   # https://cmake.org/cmake/help/latest/cpack_gen/wix.html
 
