@@ -27,10 +27,10 @@ public:
 private:
     explicit tcp_connection(boost::asio::io_context &io_context);
 
-    /// \biref 异步接受下一个请求
+    /// \biref 异步接收下一个请求
     void async_receive();
 
-    /// \brief 异步接受到请求时的回调
+    /// \brief 异步接收到请求时的回调
     /// \param req_ptr 请求报文共享指针（request pointer）
     /// \param err     错误码（error code）
     void on_received(streambuf_ptr req_ptr, const boost::system::error_code &err) noexcept;
@@ -42,7 +42,7 @@ private:
     /// \biref 异步发送出回应时的回调
     /// \param res_ptr 回应报文共享指针（response pointer）
     /// \param err     错误码（error code）
-    void on_sended(string_ptr res_ptr, const boost::system::error_code &err) noexcept;
+    void on_sent(string_ptr res_ptr, const boost::system::error_code &err) noexcept;
 
     boost::asio::ip::tcp::socket socket_;
     std::string remote_address_;

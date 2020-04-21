@@ -74,10 +74,10 @@ void tcp_connection::async_send(const string &res)
     boost::asio::async_write(
         socket_,
         boost::asio::buffer(*res_ptr),
-        boost::bind(&tcp_connection::on_sended, shared_from_this(), res_ptr, boost::asio::placeholders::error));
+        boost::bind(&tcp_connection::on_sent, shared_from_this(), res_ptr, boost::asio::placeholders::error));
 }
 
-void tcp_connection::on_sended(string_ptr res_ptr, const boost::system::error_code &err) noexcept
+void tcp_connection::on_sent(string_ptr res_ptr, const boost::system::error_code &err) noexcept
 {
     try {
         if (!err) {

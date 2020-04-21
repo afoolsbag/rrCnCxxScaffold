@@ -3,7 +3,7 @@
 /// \file
 /// \brief 脚手架示例工程
 ///
-/// \version 2019-11-26
+/// \version 2020-04-21
 /// \since 2018-04-02
 /// \authors zhengrr
 /// \copyright Unlicense
@@ -98,6 +98,7 @@ int main(int argc, char *argv[]) noexcept
         }
 
         // 业务逻辑
+        SPDLOG_INFO("Use {} locale.", locale {}.name());
         SPDLOG_INFO("Use {} locale.", setlocale(LC_ALL, nullptr));
 
         boost::asio::io_context io_context;
