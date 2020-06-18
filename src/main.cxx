@@ -3,7 +3,7 @@
 /// \file
 /// \brief 脚手架示例工程
 ///
-/// \version 2020-04-21
+/// \version 2020-06-18
 /// \since 2018-04-02
 /// \authors zhengrr
 /// \copyright Unlicense
@@ -21,6 +21,7 @@
 
 #include "application_options.hxx"
 #include "configuration.hxx"
+#include "http_server.hxx"
 #include "tcp_server.hxx"
 
 using namespace std;
@@ -102,7 +103,8 @@ int main(int argc, char *argv[]) noexcept
         SPDLOG_INFO("Use {} locale.", setlocale(LC_ALL, nullptr));
 
         boost::asio::io_context io_context;
-        tcp_server server {io_context, opts->export_port};
+        http_server http_server {io_context, opts->http_export_port};
+        tcp_server tcp_server {io_context, opts->tcp_export_port};
         io_context.run();
 
         return EXIT_SUCCESS;

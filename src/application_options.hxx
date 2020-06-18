@@ -4,7 +4,7 @@
 /// \brief 应用选项
 /// \sa <https://boost.org/doc/libs/master/libs/program_options/>
 ///
-/// \version 2019-12-19
+/// \version 2020-06-18
 /// \since 2019-08-15
 /// \authors zhengrr
 /// \copyright Unlicense
@@ -35,7 +35,8 @@ private:
 #//=============================================================================
 #//
         boost::filesystem::path  logs_directory;     ///< 日志目录
-        std::uint16_t            export_port;        ///< 导出端口（监听端口）
+        std::uint16_t            tcp_export_port;    ///< TCP 导出端口（监听端口）
+        std::uint16_t            http_export_port;   ///< HTTP 导出端口（监听端口）
         std::vector<std::string> parameters;         ///< 参数
 #//
 #//-----------------------------------------------------------------------------

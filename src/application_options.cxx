@@ -33,7 +33,8 @@ application_options::application_options(int argc, const char *const argv[])
     const auto default_logs_directory = program_location().replace_extension(".logs");
     common_options_.add_options()
         ("logs-directory", value(&entries_.logs_directory)->default_value(default_logs_directory), "Specify logs directory")
-        ("export-port,p", value(&entries_.export_port)->default_value(49152), "Specify listening port");
+        ("tcp-export-port,t", value(&entries_.tcp_export_port)->default_value(9), "Specify TCP server listening port")
+        ("http-export-port,h", value(&entries_.http_export_port)->default_value(80), "Specify HTTP server listening port");
     hidden_options_.add_options()
         ("parameters", value(&entries_.parameters)->composing(), "Add some parameter(s)");
 #//
@@ -75,7 +76,8 @@ void application_options::print_options(std::ostream &os) const
 #//=============================================================================
 #//
     os << "  logs-directory     = " << entries_.logs_directory << '\n';
-    os << "  export-port        = " << entries_.export_port << '\n';
+    os << "  tcp-export-port    = " << entries_.tcp_export_port << '\n';
+    os << "  http-export-port   = " << entries_.http_export_port << '\n';
     os << "  parameters         = "; for (const auto &e : entries_.parameters) os << e << ' '; os << '\n';
 #//
 #//-----------------------------------------------------------------------------
