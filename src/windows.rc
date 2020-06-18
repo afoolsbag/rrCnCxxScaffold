@@ -1,12 +1,19 @@
+// https://docs.microsoft.com/windows/win32/menurc/about-resource-files
 #define APSTUDIO_READONLY_SYMBOLS
 #include <winresrc.h>
 #undef APSTUDIO_READONLY_SYMBOLS
+
 #include "configuration.hxx"
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(65001)
 
+// https://docs.microsoft.com/windows/win32/menurc/icon-resource
+// MORE FREE ICON DOWNLOAD: http://www.iconarchive.com/
+application_icon ICON "application_icon.ico"
+
+// https://docs.microsoft.com/windows/win32/menurc/versioninfo-resource
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION    PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_PATCH, PROJECT_VERSION_TWEAK
  PRODUCTVERSION PRODUCT_VERSION_MAJOR, PRODUCT_VERSION_MINOR, PRODUCT_VERSION_PATCH, PRODUCT_VERSION_TWEAK

@@ -46,8 +46,8 @@ find_package(rrspdlog CONFIG HINTS "${PRODUCT_SOURCE_DIR}/deps/rrCnCxx/include/r
 
 # 程序：${PROJECT_NAME}
 configure_file("src/configuration.hxx.in" "src/configuration.hxx" @ONLY)
-aux_source_directory_con("src"                             zSrc       RECURSE EXTENSIONS ".rc" PREFIX "src")
-aux_source_directory_con("${CMAKE_CURRENT_BINARY_DIR}/src" zGenerated RECURSE                  PREFIX "generated")
+aux_source_directory_con("src"                             zSrc       RECURSE EXTENSIONS PREFIX "src")
+aux_source_directory_con("${CMAKE_CURRENT_BINARY_DIR}/src" zGenerated RECURSE            PREFIX "generated")
 add_executable_con(
   "${PROJECT_NAME}"   ${zSrc} ${zGenerated}
                       "README.md"
@@ -66,7 +66,8 @@ add_executable_con(
                               $<$<PLATFORM_ID:Linux>:dl>
                               CONAN_PKG::ms-gsl
                               $<$<PLATFORM_ID:Linux>:stdc++fs>
-  SOURCES             PRIVATE $<$<CXX_COMPILER_ID:MSVC>:src/version.rc>)
+  SOURCES             PRIVATE $<$<CXX_COMPILER_ID:MSVC>:src/windows.rc>
+                              $<$<CXX_COMPILER_ID:MSVC>:src/application_icon.ico>)
 
 # 安装
 install(
