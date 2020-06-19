@@ -46,10 +46,11 @@ find_package(rrspdlog CONFIG HINTS "${PRODUCT_SOURCE_DIR}/deps/rrCnCxx/include/r
 
 # 程序：${PROJECT_NAME}
 configure_file("src/configuration.hxx.in" "src/configuration.hxx" @ONLY)
-aux_source_directory_con("src"                             zSrc       RECURSE EXTENSIONS PREFIX "src")
-aux_source_directory_con("${CMAKE_CURRENT_BINARY_DIR}/src" zGenerated RECURSE            PREFIX "generated")
+aux_source_directory_con("src"                             zSrc       RECURSE                 PREFIX "src")
+aux_source_directory_con("res"                             zRes       EXTENSIONS ".ico" ".rc" PREFIX "res")
+aux_source_directory_con("${CMAKE_CURRENT_BINARY_DIR}/src" zGenerated RECURSE                 PREFIX "generated")
 add_executable_con(
-  "${PROJECT_NAME}"   ${zSrc} ${zGenerated}
+  "${PROJECT_NAME}"   ${zSrc} ${zRes} ${zGenerated}
                       "README.md"
   PROPERTIES          CXX_STANDARD          17 #20
                       CXX_STANDARD_REQUIRED ON
@@ -61,13 +62,12 @@ add_executable_con(
   COMPILE_OPTIONS     PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/wd4702>
   INCLUDE_DIRECTORIES PRIVATE "src"
                               "${CMAKE_CURRENT_BINARY_DIR}/src"
+                              "${CMAKE_CURRENT_BINARY_DIR}/res"
   LINK_LIBRARIES      PRIVATE rrspdlog
                               CONAN_PKG::boost
                               $<$<PLATFORM_ID:Linux>:dl>
                               CONAN_PKG::ms-gsl
-                              $<$<PLATFORM_ID:Linux>:stdc++fs>
-  SOURCES             PRIVATE $<$<CXX_COMPILER_ID:MSVC>:src/windows.rc>
-                              $<$<CXX_COMPILER_ID:MSVC>:src/application_icon.ico>)
+                              $<$<PLATFORM_ID:Linux>:stdc++fs>)
 
 # 安装
 install(

@@ -1,4 +1,4 @@
-# zhengrr
+﻿# zhengrr
 # 2016 – 2019-10-12
 # Unlicense
 
@@ -685,3 +685,4 @@ compile_commands.json
 /build*/
 
 !/*.cmd
+!/res/*.cmd
