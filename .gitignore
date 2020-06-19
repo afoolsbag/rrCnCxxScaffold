@@ -685,4 +685,4 @@ compile_commands.json
 /build*/
 
 !/*.cmd
-!/res/*.cmd
+!/res/**/*
