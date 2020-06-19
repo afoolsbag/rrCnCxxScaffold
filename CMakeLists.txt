@@ -46,9 +46,9 @@ find_package(rrspdlog CONFIG HINTS "${PRODUCT_SOURCE_DIR}/deps/rrCnCxx/include/r
 
 # 程序：${PROJECT_NAME}
 configure_file("src/configuration.hxx.in" "src/configuration.hxx" @ONLY)
-aux_source_directory_con("src"                             zSrc       RECURSE                 PREFIX "src")
-aux_source_directory_con("res"                             zRes       EXTENSIONS ".ico" ".rc" PREFIX "res")
-aux_source_directory_con("${CMAKE_CURRENT_BINARY_DIR}/src" zGenerated RECURSE                 PREFIX "generated")
+aux_source_directory_con("src"                             zSrc       RECURSE                         PREFIX "src")
+aux_source_directory_con("res"                             zRes       RECURSE EXTENSIONS ".ico" ".rc" PREFIX "res")
+aux_source_directory_con("${CMAKE_CURRENT_BINARY_DIR}/src" zGenerated RECURSE                         PREFIX "generated")
 add_executable_con(
   "${PROJECT_NAME}"   ${zSrc} ${zRes} ${zGenerated}
                       "README.md"
